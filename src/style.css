@@ -155,3 +155,6 @@ body.nogl .nogl-note { display: block; padding: 0 var(--gut); font-size: 12px; o
   .panel > *, .panel.on > * { transition: none; filter: none; transform: none; }
   .hint i, .forming i, #intro .dot { animation: none; }
 }
+
+/* ?capture: only the journey, for the README clip */
+body.capture .hud, body.capture .rail, body.capture .panel, body.capture .shade, body.capture .lbl, body.capture #intro { display: none !important; }

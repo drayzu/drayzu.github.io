@@ -13,11 +13,13 @@ import { astro } from './scene/astro';
 import { tiempo } from './scene/tiempo';
 import { civilizacion } from './scene/civilizacion';
 
-declare global { interface Window { __t0: number; __go?: boolean } }
+declare global { interface Window { __t0: number; __go?: boolean; renderAt?: (t: number, p: number) => void; sceneReady?: boolean } }
 
 const body = document.body;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const params = new URLSearchParams(location.search);
+const capture = params.has('capture'); // ?capture: no interface, frames drawn on demand by renderAt (README clip)
+if (capture) body.classList.add('capture');
 
 applyLang();
 if (import.meta.env.BASE_URL !== '/') { // the DCC copy points back to GitHub Pages instead of to itself
@@ -95,9 +97,9 @@ function stop(center: THREE.Vector3, offset: THREE.Vector3, side: number) { // s
   return { pos, target: center.clone().addScaledVector(right, -side) };
 }
 const mid = new THREE.Vector3().addVectors(C1, C4).multiplyScalar(.5).add(new THREE.Vector3(2, 0, 0));
-const S = mobile ? 0 : 1;
+const S = mobile || capture ? 0 : 1; // without text beside it, each piece sits in the middle
 const STOPS = [
-  stop(C1, new THREE.Vector3(9, 3.5, 44), mobile ? 0 : 10),
+  stop(C1, new THREE.Vector3(9, 3.5, 44), 10 * S),
   stop(C1, new THREE.Vector3(-19, 6, 16), 7.5 * S),
   stop(C2, new THREE.Vector3(-11, 3, 23), 8 * S),
   stop(C3, new THREE.Vector3(9, 5, 30), 10 * S),
@@ -147,7 +149,7 @@ intro.addEventListener('click', startReveal);
 addEventListener('keydown', startReveal, { once: true });
 addEventListener('wheel', startReveal, { once: true, passive: true });
 addEventListener('touchstart', startReveal, { once: true, passive: true });
-if (window.__go || reduced || params.has('og') || params.has('stop')) startReveal();
+if (window.__go || reduced || capture || params.has('og') || params.has('stop')) startReveal();
 setTimeout(startReveal, Math.max(3400 - (performance.now() - window.__t0), 300));
 history.scrollRestoration = 'manual';
 scrollTo(0, 0);
@@ -181,13 +183,15 @@ let active = -2;
 const timer = new THREE.Timer();
 const pos = new THREE.Vector3(), tgt = new THREE.Vector3(), tmp = new THREE.Vector3(), right = new THREE.Vector3(), up = new THREE.Vector3();
 let frames = 0, slow = 0;
+let fixed: { t: number; p: number } | null = null;
 
 function frame(now: number) {
   timer.update(now);
-  const dt = Math.min(timer.getDelta(), .05), t = timer.getElapsed();
+  let dt = Math.min(timer.getDelta(), .05), t = timer.getElapsed();
+  if (fixed) { dt = 1 / 30; t = fixed.t; p = fixed.p; introT = 1; }
   shared.uTime.value = t;
 
-  p += (pTarget - p) * (1 - Math.exp(-dt * (reduced ? 8 : 3.2)));
+  if (!fixed) p += (pTarget - p) * (1 - Math.exp(-dt * (reduced ? 8 : 3.2)));
   const i = Math.min(Math.floor(p), LAST - 1), f = p - i, u = i + dwell(f);
   posCurve.getPoint(u / LAST, pos);
   tgtCurve.getPoint(u / LAST, tgt);
@@ -247,6 +251,7 @@ function frame(now: number) {
   });
 
   composer.render(dt);
+  if (capture) return;
 
   // adapt resolution once if the machine struggles
   if (introT >= 1 && frames < 180) {
@@ -262,4 +267,7 @@ function resize() {
   layout(); pTarget = clampP(scrollY / segH);
 }
 addEventListener('resize', resize);
-requestAnimationFrame(frame);
+if (capture) {
+  window.renderAt = (time, at) => { fixed = { t: time, p: at }; frame(performance.now()); };
+  window.sceneReady = true;
+} else requestAnimationFrame(frame);
