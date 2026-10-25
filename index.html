@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>drayzu — How small, how brief, how far</title>
+  <meta name="description" content="Interactive pieces about the universe by Diego (drayzu): Potencias, AstroIngeniería, Tiempo and Civilización.">
+  <meta name="theme-color" content="#040507">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="drayzu — How small, how brief, how far">
+  <meta property="og:description" content="Interactive pieces about the universe, and our place in it.">
+  <meta property="og:url" content="https://drayzu.github.io/">
+  <meta property="og:image" content="https://drayzu.github.io/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+</head>
+<body class="locked">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="shade" id="shade"></div>
+  <div id="track"></div>
+
+  <div id="intro">
+    <div class="dot"></div>
+    <div class="word" aria-label="drayzu"></div>
+    <div class="sub" data-t="intro.sub">A SERIES IN FOUR PIECES</div>
+    <div class="skip" data-t="intro.skip">CLICK TO ENTER</div>
+  </div>
+  <script>
+    // runs before the 3D loads, so the name appears at once
+    window.__t0 = performance.now();
+    [...'drayzu'].forEach((ch, i) => { const s = document.createElement('span'); s.textContent = ch; s.style.animationDelay = (.35 + i * .09) + 's'; document.querySelector('#intro .word').append(s); });
+    document.getElementById('intro').addEventListener('click', () => { window.__go = true; }, { once: true });
+  </script>
+
+  <header class="hud">
+    <a class="logo" href="#" data-go="0"><i></i>drayzu</a>
+    <div class="hud-r">
+      <div class="langs"><button data-lang="en">EN</button><button data-lang="es">ES</button></div>
+      <div><b id="hud-stop">ARRIVAL</b> · <span data-t="hud.live">2 OF 4 LIVE</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel hero" data-stop="0">
+      <p class="kick" data-t="hero.kick">DIEGO · DRAYZU</p>
+      <h1 data-t="hero.title">How small,<br>how brief, how far</h1>
+      <p class="tag" data-t="hero.tag">Interactive pieces about the universe, and our place in it.</p>
+      <p class="hint"><i></i><span data-t="hero.hint">SCROLL TO TRAVEL</span></p>
+    </section>
+
+    <section class="panel" data-stop="1" style="--c:var(--pot)">
+      <p class="kick"><span data-t="pot.axis"></span> <em>· <span data-t="live"></span></em></p>
+      <h2>Potencias</h2>
+      <p class="tag" data-t="pot.tag"></p>
+      <div class="ruler"><span data-t="pot.left"></span><i></i><span data-t="pot.right"></span></div>
+      <a class="enter" href="https://drayzu.github.io/Potencias/" data-dive="1"><svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M1 6h13M9.5 1.5 14 6l-4.5 4.5" fill="none" stroke="var(--c)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>drayzu.github.io/Potencias<span data-t="enter">ENTER</span></a>
+    </section>
+
+    <section class="panel" data-stop="2" style="--c:var(--astro)">
+      <p class="kick"><span data-t="astro.axis"></span> <em>· <span data-t="live"></span></em></p>
+      <h2>AstroIngeniería</h2>
+      <p class="tag" data-t="astro.tag"></p>
+      <div class="ruler"><span data-t="astro.left"></span><i></i><span data-t="astro.right"></span></div>
+      <a class="enter" href="https://drayzu.github.io/AstroIngenieria/" data-dive="2"><svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M1 6h13M9.5 1.5 14 6l-4.5 4.5" fill="none" stroke="var(--c)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>drayzu.github.io/AstroIngenieria<span data-t="enter">ENTER</span></a>
+    </section>
+
+    <section class="panel" data-stop="3" style="--c:var(--time)">
+      <p class="kick"><span data-t="time.axis"></span> <em>· <span data-t="forming"></span></em></p>
+      <h2>Tiempo</h2>
+      <p class="tag" data-t="time.tag"></p>
+      <div class="ruler"><span data-t="time.left"></span><i></i><span data-t="time.right"></span></div>
+      <p class="forming"><i></i><span data-t="progress"></span> <em data-t="time.note"></em></p>
+    </section>
+
+    <section class="panel" data-stop="4" style="--c:var(--civ)">
+      <p class="kick"><span data-t="civ.axis"></span> <em>· <span data-t="forming"></span></em></p>
+      <h2>Civilización</h2>
+      <p class="tag" data-t="civ.tag"></p>
+      <div class="ruler"><span data-t="civ.left"></span><i></i><span data-t="civ.right"></span></div>
+      <p class="forming"><i></i><span data-t="progress"></span> <em data-t="civ.note"></em></p>
+    </section>
+
+    <section class="panel observer" data-stop="5">
+      <p class="kick" data-t="map.kick">THE OBSERVER · 33.45° S</p>
+      <h2>Diego · drayzu</h2>
+      <p class="tag" data-t="map.tag"></p>
+      <div class="links"><a href="https://github.com/drayzu">GITHUB</a><a href="https://users.dcc.uchile.cl/~direyes/">DCC</a></div>
+    </section>
+  </main>
+
+  <button class="lbl" data-lbl="0" data-go="1" style="--c:var(--pot)"><b>Potencias</b><span data-t="lbl.pot"></span></button>
+  <button class="lbl" data-lbl="1" data-go="2" style="--c:var(--astro)"><b>AstroIngeniería</b><span data-t="lbl.astro"></span></button>
+  <button class="lbl" data-lbl="2" data-go="3" style="--c:var(--time)"><b>Tiempo</b><span data-t="lbl.time"></span></button>
+  <button class="lbl" data-lbl="3" data-go="4" style="--c:var(--civ)"><b>Civilización</b><span data-t="lbl.civ"></span></button>
+
+  <nav class="rail" aria-label="Stops">
+    <div class="rail-line"><div class="rail-fill" id="rail-fill"></div></div>
+    <ol>
+      <li><button data-go="1" class="live" style="--c:var(--pot)"><i></i><span>Potencias</span></button></li>
+      <li><button data-go="2" class="live" style="--c:var(--astro)"><i></i><span>AstroIngeniería</span></button></li>
+      <li><button data-go="3" style="--c:var(--time)"><i></i><span>Tiempo</span></button></li>
+      <li><button data-go="4" style="--c:var(--civ)"><i></i><span>Civilización</span></button></li>
+      <li><button data-go="5" style="--c:var(--ink)"><i></i><span data-t="rail.map">Map</span></button></li>
+    </ol>
+  </nav>
+
+  <p class="nogl-note" data-t="nogl"></p>
+  <div id="flood"></div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

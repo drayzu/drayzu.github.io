@@ -1,0 +1,9 @@
+node_modules
+dist
+*.log
+__pycache__/
+
+# local only: the earlier direction and the prototypes
+archive/
+prototypes/
+.claude/
