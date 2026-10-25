@@ -20,6 +20,10 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const params = new URLSearchParams(location.search);
 
 applyLang();
+if (import.meta.env.BASE_URL !== '/') { // the DCC copy points back to GitHub Pages instead of to itself
+  const other = document.getElementById('other-home') as HTMLAnchorElement;
+  other.href = 'https://drayzu.github.io/'; other.textContent = 'DRAYZU.GITHUB.IO';
+}
 document.querySelectorAll<HTMLButtonElement>('[data-lang]').forEach(b => b.addEventListener('click', () => {
   applyLang(b.dataset.lang as Lang); active = -2; // re-label the current stop
 }));
