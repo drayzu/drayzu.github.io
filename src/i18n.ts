@@ -5,7 +5,6 @@ const sup = (n: string) => `10<sup>${n}</sup>`;
 const T: Record<Lang, Record<string, string>> = {
   en: {
     'intro.sub': 'A SERIES IN FOUR PIECES',
-    'intro.skip': 'CLICK TO ENTER',
     'hud.live': '2 OF 4 LIVE',
     'hero.kick': 'DIEGO · DRAYZU',
     'hero.title': 'How small,<br>how brief, how far',
@@ -29,7 +28,6 @@ const T: Record<Lang, Record<string, string>> = {
   },
   es: {
     'intro.sub': 'UNA SERIE EN CUATRO PIEZAS',
-    'intro.skip': 'HAZ CLIC PARA ENTRAR',
     'hud.live': '2 DE 4 PUBLICADAS',
     'hero.kick': 'DIEGO · DRAYZU',
     'hero.title': 'Lo pequeño,<br>lo breve, lo lejano',
