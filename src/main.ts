@@ -6,7 +6,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { apply as applyLang, t as tr, type Lang } from './i18n';
-import { mobile, near, shared, smooth } from './scene/shared';
+import { mobile, shared, smooth } from './scene/shared';
 import { sky } from './scene/sky';
 import { potencias } from './scene/potencias';
 import { astro } from './scene/astro';
@@ -77,11 +77,14 @@ const C2 = new THREE.Vector3(46, 7, -78);
 const C3 = new THREE.Vector3(-40, -10, -165);
 const C4 = new THREE.Vector3(30, 14, -255);
 sky(scene);
-const pieces = [potencias(scene, C1), astro(scene, C2), tiempo(scene, C3, 3), civilizacion(scene, C4, 4)];
+// The journey stops at the pieces (Espacio, Tiempo, Destino); the Atlas, the library that serves them all,
+// shines beside the route instead of on it, and opens straight from the map or the header.
+const pieces = [potencias(scene, C1), astro(scene, C2), tiempo(scene, C3, 2, 4), civilizacion(scene, C4, 3, 4)];
 const centers = pieces.map(p => p.center);
+const onRoute = [centers[0], centers[2], centers[3]];
 
 const route = (() => { // the path between them, shown on the map
-  const curve = new THREE.CatmullRomCurve3(centers, false, 'centripetal');
+  const curve = new THREE.CatmullRomCurve3(onRoute, false, 'centripetal');
   const g = new THREE.BufferGeometry().setFromPoints(curve.getPoints(240));
   const l = new THREE.Line(g, new THREE.LineDashedMaterial({ color: 0xece7db, dashSize: 1.6, gapSize: 2.6, transparent: true, opacity: 0, depthWrite: false }));
   l.computeLineDistances(); scene.add(l);
@@ -101,19 +104,19 @@ const S = mobile || capture ? 0 : 1; // without text beside it, each piece sits 
 const STOPS = [
   stop(C1, new THREE.Vector3(9, 3.5, 44), 10 * S),
   stop(C1, new THREE.Vector3(-19, 6, 16), 7.5 * S),
-  stop(C2, new THREE.Vector3(-11, 3, 23), 8 * S),
   stop(C3, new THREE.Vector3(9, 5, 30), 10 * S),
   stop(C4, new THREE.Vector3(-8, 15, 30), 11 * S),
   { pos: mid.clone().add(new THREE.Vector3(185, 150, 10)), target: mid.clone().add(new THREE.Vector3(0, -22, 0)) },
 ];
+const LAST_PIECE = STOPS.length - 2;
 if (mobile) { // on a phone the object sits above the text instead of beside it
-  for (const s of STOPS.slice(0, 5)) s.target.y -= 4;
+  for (const s of STOPS.slice(0, LAST_PIECE + 1)) s.target.y -= 4;
 }
 const posCurve = new THREE.CatmullRomCurve3(STOPS.map(s => s.pos), false, 'centripetal');
 const tgtCurve = new THREE.CatmullRomCurve3(STOPS.map(s => s.target), false, 'centripetal');
 const LAST = STOPS.length - 1;
 const dwell = (f: number) => .5 - .5 * Math.cos(Math.PI * Math.min(Math.max((f - .14) / .72, 0), 1));
-const BANK = [.10, -.12, .14, -.10, .06];
+const BANK = [.10, -.12, .14, -.10];
 const INTRO = { pos: C1.clone().add(new THREE.Vector3(.35, .15, 1.4)), target: C1.clone() };
 
 // ------------------------------------------------------------------ scroll and input
@@ -174,8 +177,8 @@ const shade = document.getElementById('shade')!;
 const railBtns = [...document.querySelectorAll<HTMLElement>('.rail button')];
 const railFill = document.getElementById('rail-fill')!;
 const hudStop = document.getElementById('hud-stop')!;
-const STOP_NAMES = (k: number) => [tr('stop.0'), '01 · POTENCIAS', '02 · ASTROINGENIERÍA', '03 · TIEMPO', '04 · CIVILIZACIÓN', tr('stop.5')][k];
-const STOP_COLORS = ['--ink', '--pot', '--astro', '--time', '--civ', '--ink'];
+const STOP_NAMES = (k: number) => k === 0 ? tr('stop.0') : k === LAST ? tr('stop.5') : `0${k} · ${tr(['name.space', 'name.time', 'name.civ'][k - 1]).toUpperCase()}`;
+const STOP_COLORS = ['--ink', '--pot', '--time', '--civ', '--ink'];
 const labels = [...document.querySelectorAll<HTMLElement>('.lbl')];
 let active = -2;
 
@@ -213,7 +216,7 @@ function frame(now: number) {
   const par = Math.min(pos.distanceTo(tgt) * .03, 4);
   pos.addScaledVector(right, mouseS.x * par).addScaledVector(up, -mouseS.y * par * .6);
 
-  bloom.strength = .9 - .5 * near(p, 2);
+  bloom.strength = .9;
   if (dive) {
     dive.t += dt / 1.5;
     const e = Math.pow(Math.min(dive.t, 1), 3.2);
@@ -230,7 +233,7 @@ function frame(now: number) {
   shared.uScale.value = renderer.domElement.height / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2));
 
   for (const piece of pieces) piece.update(t, p);
-  (route.material as THREE.LineDashedMaterial).opacity = .35 * smooth(4.2, 4.9, p);
+  (route.material as THREE.LineDashedMaterial).opacity = .35 * smooth(LAST - .8, LAST - .1, p);
 
   // interface
   const a = introT < 1 ? -1 : Math.abs(p - Math.round(p)) < .3 ? Math.round(p) : -1;
@@ -243,7 +246,7 @@ function frame(now: number) {
     if (a >= 0) { hudStop.textContent = STOP_NAMES(a); hudStop.style.setProperty('--c', `var(${STOP_COLORS[a]})`); }
   }
   railFill.style.width = `${smooth(0, 1, (p - 1) / (LAST - 1)) * 100}%`;
-  if (p > 4.3) labels.forEach((el, k) => {
+  if (p > LAST - .7) labels.forEach((el, k) => {
     tmp.copy(centers[k]).project(camera);
     const x = (tmp.x * .5 + .5) * innerWidth, flip = x > innerWidth - 260;
     el.classList.toggle('flip', flip);

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>drayzu — How small, how brief, how far</title>
-  <meta name="description" content="Interactive pieces about the universe by Diego (drayzu): Potencias, AstroIngeniería, Tiempo and Civilización.">
+  <meta name="description" content="Interactive pieces about the universe by Diego (drayzu): Space, Time and Destiny, and the Atlas, the library behind them.">
   <meta name="theme-color" content="#040507">
   <meta property="og:type" content="website">
   <meta property="og:title" content="drayzu — How small, how brief, how far">
@@ -37,7 +37,7 @@
   <header class="hud">
     <a class="logo" href="#" data-go="0"><i></i>drayzu</a>
     <div class="hud-r">
-      <div class="langs"><button data-lang="en">EN</button><button data-lang="es">ES</button></div>
+      <div class="hud-top"><a class="atlas" href="https://drayzu.github.io/Atlas/" style="--c:var(--astro)"><i></i>ATLAS<span data-t="atlas.what"> · THE LIBRARY</span></a><div class="langs"><button data-lang="en">EN</button><button data-lang="es">ES</button></div></div>
       <div><b id="hud-stop">ARRIVAL</b> · <span data-t="hud.live">2 OF 4 LIVE</span></div>
     </div>
   </header>
@@ -52,57 +52,48 @@
 
     <section class="panel" data-stop="1" style="--c:var(--pot)">
       <p class="kick"><span data-t="pot.axis"></span> <em>· <span data-t="live"></span></em></p>
-      <h2>Potencias</h2>
+      <h2 data-t="name.space">Space</h2>
       <p class="tag" data-t="pot.tag"></p>
       <div class="ruler"><span data-t="pot.left"></span><i></i><span data-t="pot.right"></span></div>
-      <a class="enter" href="https://drayzu.github.io/Potencias/" data-dive="1"><svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M1 6h13M9.5 1.5 14 6l-4.5 4.5" fill="none" stroke="var(--c)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>drayzu.github.io/Potencias<span data-t="enter">ENTER</span></a>
+      <a class="enter" href="https://drayzu.github.io/Espacio/" data-dive="1"><svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M1 6h13M9.5 1.5 14 6l-4.5 4.5" fill="none" stroke="var(--c)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>drayzu.github.io/Espacio<span data-t="enter">ENTER</span></a>
     </section>
 
-    <section class="panel" data-stop="2" style="--c:var(--astro)">
-      <p class="kick"><span data-t="astro.axis"></span> <em>· <span data-t="live"></span></em></p>
-      <h2>AstroIngeniería</h2>
-      <p class="tag" data-t="astro.tag"></p>
-      <div class="ruler"><span data-t="astro.left"></span><i></i><span data-t="astro.right"></span></div>
-      <a class="enter" href="https://drayzu.github.io/AstroIngenieria/" data-dive="2"><svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M1 6h13M9.5 1.5 14 6l-4.5 4.5" fill="none" stroke="var(--c)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>drayzu.github.io/AstroIngenieria<span data-t="enter">ENTER</span></a>
-    </section>
-
-    <section class="panel" data-stop="3" style="--c:var(--time)">
-      <p class="kick"><span data-t="time.axis"></span> <em>· <span data-t="forming"></span></em></p>
-      <h2>Tiempo</h2>
+    <section class="panel" data-stop="2" style="--c:var(--time)">
+      <p class="kick"><span data-t="time.axis"></span> <em>· <span data-t="live"></span></em></p>
+      <h2 data-t="name.time">Time</h2>
       <p class="tag" data-t="time.tag"></p>
       <div class="ruler"><span data-t="time.left"></span><i></i><span data-t="time.right"></span></div>
-      <p class="forming"><i></i><span data-t="progress"></span> <em data-t="time.note"></em></p>
+      <a class="enter" href="https://drayzu.github.io/Tiempo/" data-dive="3"><svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M1 6h13M9.5 1.5 14 6l-4.5 4.5" fill="none" stroke="var(--c)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>drayzu.github.io/Tiempo<span data-t="enter">ENTER</span></a>
     </section>
 
-    <section class="panel" data-stop="4" style="--c:var(--civ)">
+    <section class="panel" data-stop="3" style="--c:var(--civ)">
       <p class="kick"><span data-t="civ.axis"></span> <em>· <span data-t="forming"></span></em></p>
-      <h2>Civilización</h2>
+      <h2 data-t="name.civ">Destiny</h2>
       <p class="tag" data-t="civ.tag"></p>
       <div class="ruler"><span data-t="civ.left"></span><i></i><span data-t="civ.right"></span></div>
       <p class="forming"><i></i><span data-t="progress"></span> <em data-t="civ.note"></em></p>
     </section>
 
-    <section class="panel observer" data-stop="5">
+    <section class="panel observer" data-stop="4">
       <p class="kick" data-t="map.kick">THE OBSERVER · 33.45° S</p>
       <h2>Diego · drayzu</h2>
       <p class="tag" data-t="map.tag"></p>
-      <div class="links"><a href="https://github.com/drayzu">GITHUB</a><a id="other-home" href="https://users.dcc.uchile.cl/~direyes/">DCC</a></div>
+      <div class="links"><a href="https://drayzu.github.io/Atlas/">ATLAS</a><a href="https://github.com/drayzu">GITHUB</a><a id="other-home" href="https://users.dcc.uchile.cl/~direyes/">DCC</a></div>
     </section>
   </main>
 
-  <button class="lbl" data-lbl="0" data-go="1" style="--c:var(--pot)"><i class="hit" aria-hidden="true"></i><b>Potencias</b><span data-t="lbl.pot"></span></button>
-  <button class="lbl" data-lbl="1" data-go="2" style="--c:var(--astro)"><i class="hit" aria-hidden="true"></i><b>AstroIngeniería</b><span data-t="lbl.astro"></span></button>
-  <button class="lbl" data-lbl="2" data-go="3" style="--c:var(--time)"><i class="hit" aria-hidden="true"></i><b>Tiempo</b><span data-t="lbl.time"></span></button>
-  <button class="lbl" data-lbl="3" data-go="4" style="--c:var(--civ)"><i class="hit" aria-hidden="true"></i><b>Civilización</b><span data-t="lbl.civ"></span></button>
+  <button class="lbl" data-lbl="0" data-go="1" style="--c:var(--pot)"><i class="hit" aria-hidden="true"></i><b data-t="name.space">Space</b><span data-t="lbl.pot"></span></button>
+  <a class="lbl aside" data-lbl="1" href="https://drayzu.github.io/Atlas/" style="--c:var(--astro)"><i class="hit" aria-hidden="true"></i><b>Atlas</b><span data-t="lbl.astro"></span></a>
+  <button class="lbl" data-lbl="2" data-go="2" style="--c:var(--time)"><i class="hit" aria-hidden="true"></i><b data-t="name.time">Time</b><span data-t="lbl.time"></span></button>
+  <button class="lbl" data-lbl="3" data-go="3" style="--c:var(--civ)"><i class="hit" aria-hidden="true"></i><b data-t="name.civ">Destiny</b><span data-t="lbl.civ"></span></button>
 
   <nav class="rail" aria-label="Stops">
     <div class="rail-line"><div class="rail-fill" id="rail-fill"></div></div>
     <ol>
-      <li><button data-go="1" class="live" style="--c:var(--pot)"><i></i><span>Potencias</span></button></li>
-      <li><button data-go="2" class="live" style="--c:var(--astro)"><i></i><span>AstroIngeniería</span></button></li>
-      <li><button data-go="3" style="--c:var(--time)"><i></i><span>Tiempo</span></button></li>
-      <li><button data-go="4" style="--c:var(--civ)"><i></i><span>Civilización</span></button></li>
-      <li><button data-go="5" style="--c:var(--ink)"><i></i><span data-t="rail.map">Map</span></button></li>
+      <li><button data-go="1" class="live" style="--c:var(--pot)"><i></i><span data-t="name.space">Space</span></button></li>
+      <li><button data-go="2" class="live" style="--c:var(--time)"><i></i><span data-t="name.time">Time</span></button></li>
+      <li><button data-go="3" style="--c:var(--civ)"><i></i><span data-t="name.civ">Destiny</span></button></li>
+      <li><button data-go="4" style="--c:var(--ink)"><i></i><span data-t="rail.map">Map</span></button></li>
     </ol>
   </nav>
 

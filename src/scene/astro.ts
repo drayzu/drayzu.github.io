@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { C, Q, R, buffers, glow, mix3, points, put, randDir, shared, std, type Piece } from './shared';
 import { NOISE } from './noise';
 
-/** 02 · AstroIngeniería: a star, half wrapped in a Dyson swarm that builds and unbuilds itself. */
+/** The Atlas (the series' library): a star, half wrapped in a Dyson swarm that builds and unbuilds itself. */
 export function astro(scene: THREE.Scene, center: THREE.Vector3): Piece {
   const group = new THREE.Group();
   group.position.copy(center);

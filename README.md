@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://drayzu.github.io/"><picture><source type="image/avif" srcset="media/vuelo.avif"><img src="media/vuelo.webp" width="100%" alt="One camera flight through the series: out of Potencias, past a star being wrapped in a Dyson swarm, along the cone of Tiempo, into the galaxy of Civilización, and back out to the map."></picture></a>
+  <a href="https://drayzu.github.io/"><picture><source type="image/avif" srcset="media/vuelo.avif"><img src="media/vuelo.webp" width="100%" alt="One camera flight through the series: out of Espacio, past the Atlas (a star being wrapped in a Dyson swarm, the library beside the route), along the cone of Tiempo, into the galaxy of Destino, and back out to the map."></picture></a>
 </p>
 
 <p align="center">
@@ -10,7 +10,7 @@
 <summary><sub>How it's made</sub></summary>
 <br>
 
-- One continuous camera flight in Three.js: scrolling moves the camera between the four pieces of the series.
+- One continuous camera flight in Three.js: scrolling moves the camera between the pieces of the series (Espacio, Tiempo, Destino, and later Infinito). The Atlas, the library that serves them, shines beside the route and is always one click away.
 - Pieces still in progress are nebulae that condense as you approach; entering a live piece dives into it.
 - Everything is particles and shaders, with bloom, a little grain, and a plain list for browsers without WebGL.
 - English and Spanish. `npm install`, `npm run dev`; pushing to `main` deploys to GitHub Pages, and `npm run deploy:dcc` publishes the same site at users.dcc.uchile.cl/~direyes.

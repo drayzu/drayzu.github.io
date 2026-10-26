@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { C, Q, R, TAU, buffers, gauss, glow, mix3, points, put, randDir, std, type Piece, type V3 } from './shared';
 
-/** 01 · Potencias: worlds inside worlds, flowing outward forever. */
+/** 01 · Espacio: worlds inside worlds, flowing outward forever. */
 export function potencias(scene: THREE.Scene, center: THREE.Vector3): Piece {
   const group = new THREE.Group();
   group.position.copy(center);
