@@ -30,7 +30,7 @@ export const mix3 = (a: V3, b: V3, t: number): V3 => [a[0] + (b[0] - a[0]) * t, 
 export const smooth = (a: number, b: number, x: number) => { const t = Math.min(Math.max((x - a) / (b - a), 0), 1); return t * t * (3 - 2 * t); };
 
 export const C = {
-  pot: col(0xff5b2e), astro: col(0xe3c48a), time: col(0x8fb4ff), civ: col(0x6fe3c1), ink: col(0xece7db),
+  pot: col(0xff5b2e), astro: col(0xe3c48a), time: col(0x8fb4ff), civ: col(0x6fe3c1), inf: col(0xc9b4ff), ink: col(0xece7db),
   white: col(0xffffff), warm: col(0xffd9a0), green: col(0x7fe08a), teal: col(0x7be0c4), red: col(0x7a2a2a),
   amber: col(0xffb46b), coral: col(0xff7a59), blue: col(0xb9cdff), pink: col(0xff8fb0),
 };

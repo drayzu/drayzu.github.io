@@ -12,6 +12,7 @@ import { potencias } from './scene/potencias';
 import { astro } from './scene/astro';
 import { tiempo } from './scene/tiempo';
 import { civilizacion } from './scene/civilizacion';
+import { infinito } from './scene/infinito';
 
 declare global { interface Window { __t0: number; __go?: boolean; renderAt?: (t: number, p: number) => void; sceneReady?: boolean } }
 
@@ -76,12 +77,13 @@ const C1 = new THREE.Vector3(0, 0, 0);
 const C2 = new THREE.Vector3(46, 7, -78);
 const C3 = new THREE.Vector3(-40, -10, -165);
 const C4 = new THREE.Vector3(30, 14, -255);
+const C5 = new THREE.Vector3(-34, 2, -338);
 sky(scene);
-// The journey stops at the pieces (Espacio, Tiempo, Destino); the Atlas, the library that serves them all,
+// The journey stops at the pieces (Espacio, Tiempo, Destino, Infinito); the Atlas, the library that serves them all,
 // shines beside the route instead of on it, and opens straight from the map or the header.
-const pieces = [potencias(scene, C1), astro(scene, C2), tiempo(scene, C3, 2, 4), civilizacion(scene, C4, 3, 4)];
+const pieces = [potencias(scene, C1), astro(scene, C2), tiempo(scene, C3, 2, 5), civilizacion(scene, C4, 3, 5), infinito(scene, C5, 4, 5)];
 const centers = pieces.map(p => p.center);
-const onRoute = [centers[0], centers[2], centers[3]];
+const onRoute = [centers[0], centers[2], centers[3], centers[4]];
 
 const route = (() => { // the path between them, shown on the map
   const curve = new THREE.CatmullRomCurve3(onRoute, false, 'centripetal');
@@ -99,14 +101,15 @@ function stop(center: THREE.Vector3, offset: THREE.Vector3, side: number) { // s
   const right = new THREE.Vector3().crossVectors(fwd, UP).normalize();
   return { pos, target: center.clone().addScaledVector(right, -side) };
 }
-const mid = new THREE.Vector3().addVectors(C1, C4).multiplyScalar(.5).add(new THREE.Vector3(2, 0, 0));
+const mid = new THREE.Vector3().addVectors(C1, C5).multiplyScalar(.5).add(new THREE.Vector3(2, 0, 0));
 const S = mobile || capture ? 0 : 1; // without text beside it, each piece sits in the middle
 const STOPS = [
   stop(C1, new THREE.Vector3(9, 3.5, 44), 10 * S),
   stop(C1, new THREE.Vector3(-19, 6, 16), 7.5 * S),
   stop(C3, new THREE.Vector3(9, 5, 30), 10 * S),
   stop(C4, new THREE.Vector3(-8, 15, 30), 11 * S),
-  { pos: mid.clone().add(new THREE.Vector3(185, 150, 10)), target: mid.clone().add(new THREE.Vector3(0, -22, 0)) },
+  stop(C5, new THREE.Vector3(10, 4, 26), 9 * S),
+  { pos: mid.clone().add(new THREE.Vector3(200, 160, 10)), target: mid.clone().add(new THREE.Vector3(-8, -58, 0)) },
 ];
 const LAST_PIECE = STOPS.length - 2;
 if (mobile) { // on a phone the object sits above the text instead of beside it
@@ -116,7 +119,7 @@ const posCurve = new THREE.CatmullRomCurve3(STOPS.map(s => s.pos), false, 'centr
 const tgtCurve = new THREE.CatmullRomCurve3(STOPS.map(s => s.target), false, 'centripetal');
 const LAST = STOPS.length - 1;
 const dwell = (f: number) => .5 - .5 * Math.cos(Math.PI * Math.min(Math.max((f - .14) / .72, 0), 1));
-const BANK = [.10, -.12, .14, -.10];
+const BANK = [.10, -.12, .14, -.10, .08];
 const INTRO = { pos: C1.clone().add(new THREE.Vector3(.35, .15, 1.4)), target: C1.clone() };
 
 // ------------------------------------------------------------------ scroll and input
@@ -177,8 +180,8 @@ const shade = document.getElementById('shade')!;
 const railBtns = [...document.querySelectorAll<HTMLElement>('.rail button')];
 const railFill = document.getElementById('rail-fill')!;
 const hudStop = document.getElementById('hud-stop')!;
-const STOP_NAMES = (k: number) => k === 0 ? tr('stop.0') : k === LAST ? tr('stop.5') : `0${k} · ${tr(['name.space', 'name.time', 'name.civ'][k - 1]).toUpperCase()}`;
-const STOP_COLORS = ['--ink', '--pot', '--time', '--civ', '--ink'];
+const STOP_NAMES = (k: number) => k === 0 ? tr('stop.0') : k === LAST ? tr('stop.5') : `0${k} · ${tr(['name.space', 'name.time', 'name.civ', 'name.inf'][k - 1]).toUpperCase()}`;
+const STOP_COLORS = ['--ink', '--pot', '--time', '--civ', '--inf', '--ink'];
 const labels = [...document.querySelectorAll<HTMLElement>('.lbl')];
 let active = -2;
 

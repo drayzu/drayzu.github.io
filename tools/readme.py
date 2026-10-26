@@ -22,10 +22,10 @@ spec = importlib.util.spec_from_file_location('build', r'E:/Proyectos/ChatGPT/dr
 B = importlib.util.module_from_spec(spec); spec.loader.exec_module(B)
 
 CSS_W, CSS_H, DSF = 920, 400, 2          # captured at 1840 x 800
-FPS, SECONDS = 30, 9
+FPS, SECONDS = 30, 11
 N = FPS * SECONDS
 FADE = 12                                 # frames of fade to and from black, so the loop is seamless
-P0, P1 = .75, 4.0                         # from just before Espacio to the map
+P0, P1 = .75, 5.0                         # from just before Espacio to the map
 AVIF_CRF, AVIF_PRESET = 34, 5
 WEBP_W, WEBP_Q = 920, 55
 

@@ -1,6 +1,6 @@
 :root {
   --bg: #040507; --ink: #ece7db;
-  --pot: #ff5b2e; --astro: #e3c48a; --time: #8fb4ff; --civ: #6fe3c1;
+  --pot: #ff5b2e; --astro: #e3c48a; --time: #8fb4ff; --civ: #6fe3c1; --inf: #c9b4ff;
   --mono: 'Geist Mono', ui-monospace, monospace;
   --serif: 'Instrument Serif', Georgia, serif;
   --gut: clamp(20px, 6vw, 110px);
@@ -46,9 +46,9 @@ body.ready .hud { opacity: 1; pointer-events: auto; }
 .rail { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); width: min(760px, calc(100vw - 2 * var(--gut)));
   z-index: 5; opacity: 0; transition: opacity 1.2s ease .5s; pointer-events: none; }
 body.ready .rail { opacity: 1; pointer-events: auto; }
-.rail-line { position: absolute; left: 12.5%; right: 12.5%; top: 6px; height: 1px; background: rgba(236,231,219,.16); }
+.rail-line { position: absolute; left: 10%; right: 10%; top: 6px; height: 1px; background: rgba(236,231,219,.16); }
 .rail-fill { position: absolute; left: 0; top: 0; height: 1px; width: 0; background: rgba(236,231,219,.7); }
-.rail ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); position: relative; }
+.rail ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); position: relative; }
 .rail li { display: flex; justify-content: center; }
 .rail button { all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 9px; }
 .rail button i { width: 13px; height: 13px; border-radius: 50%; border: 1.5px solid var(--c); background: var(--bg); transition: background .4s, box-shadow .4s, transform .4s; }
