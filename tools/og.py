@@ -43,7 +43,7 @@ try:
 
     call('Emulation.setDeviceMetricsOverride', width=W, height=H, deviceScaleFactor=2, mobile=False)
     call('Page.navigate', url=URL)
-    time.sleep(9)  # the arrival takes about 5 s
+    time.sleep(12)  # the title card and the arrival take about 9 s, then the text settles
     shot = call('Page.captureScreenshot', format='png')
     im = Image.open(io.BytesIO(base64.b64decode(shot['data']))).convert('RGB').resize((W, H), Image.LANCZOS)
     im.save(OUT, quality=88, optimize=True, progressive=True)
