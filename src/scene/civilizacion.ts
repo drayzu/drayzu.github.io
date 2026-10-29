@@ -1,14 +1,14 @@
 import * as THREE from 'three';
 import { C, Q, R, buffers, gauss, glow, mix3, near, points, put, randDir, smooth, std, type Piece, type V3 } from './shared';
 
-/** 04 · Civilización: a spiral galaxy where a bubble of light spreads from one star. Still a nebula. */
+/** 03 · Destino: a spiral galaxy where a bubble of light spreads from one star. */
 export function civilizacion(scene: THREE.Scene, center: THREE.Vector3, stop: number, map: number): Piece {
   const group = new THREE.Group();
   group.position.copy(center);
   group.rotation.set(.5, 0, -.12);
   scene.add(group);
 
-  const form = { value: .3 }, bubble = { value: 0 };
+  const form = { value: .8 }, bubble = { value: 0 };
   const n = Math.round(26000 * Q), b = buffers(n), neb = new Float32Array(n * 3);
   for (let i = 0; i < n; i++) {
     const k = R();
@@ -48,7 +48,7 @@ export function civilizacion(scene: THREE.Scene, center: THREE.Vector3, stop: nu
   return {
     center,
     update(t, p) {
-      form.value = .22 + .66 * near(p, stop) + .2 * near(p, map);
+      form.value = .8 + .25 * Math.max(near(p, stop), near(p, map)); // formed, breathing a little
       const ph = (t / 24) % 1;
       bubble.value = 11 * ph * (1 - smooth(.9, 1, ph));
       group.rotation.y = t * .015;

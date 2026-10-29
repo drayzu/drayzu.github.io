@@ -5,7 +5,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { apply as applyLang, t as tr, type Lang } from './i18n';
+import { apply as applyLang, type Lang } from './i18n';
 import { mobile, shared, smooth } from './scene/shared';
 import { sky } from './scene/sky';
 import { potencias } from './scene/potencias';
@@ -81,7 +81,7 @@ const C5 = new THREE.Vector3(-34, 2, -338);
 sky(scene);
 // The journey stops at the pieces (Espacio, Tiempo, Destino, Infinito); the Atlas, the library that serves them all,
 // shines beside the route instead of on it, and opens straight from the map or the header.
-const pieces = [potencias(scene, C1), astro(scene, C2), tiempo(scene, C3, 2, 5), civilizacion(scene, C4, 3, 5), infinito(scene, C5, 4, 5)];
+const pieces = [potencias(scene, C1), astro(scene, C2), tiempo(scene, C3, 2, 5), civilizacion(scene, C4, 3, 5), infinito(scene, C5)];
 const centers = pieces.map(p => p.center);
 const onRoute = [centers[0], centers[2], centers[3], centers[4]];
 
@@ -114,6 +114,8 @@ const STOPS = [
 const LAST_PIECE = STOPS.length - 2;
 if (mobile) { // on a phone the object sits above the text instead of beside it
   for (const s of STOPS.slice(0, LAST_PIECE + 1)) s.target.y -= 4;
+  // and the map looks down the route from behind Espacio, so the series runs up the tall screen
+  STOPS[STOPS.length - 1] = { pos: mid.clone().add(new THREE.Vector3(12, 205, 330)), target: mid.clone().add(new THREE.Vector3(4, -96, -20)) };
 }
 const posCurve = new THREE.CatmullRomCurve3(STOPS.map(s => s.pos), false, 'centripetal');
 const tgtCurve = new THREE.CatmullRomCurve3(STOPS.map(s => s.target), false, 'centripetal');
@@ -156,7 +158,7 @@ addEventListener('keydown', startReveal, { once: true });
 addEventListener('wheel', startReveal, { once: true, passive: true });
 addEventListener('touchstart', startReveal, { once: true, passive: true });
 if (window.__go || reduced || capture || params.has('og') || params.has('stop')) startReveal();
-setTimeout(startReveal, Math.max(3400 - (performance.now() - window.__t0), 300));
+setTimeout(startReveal, Math.max(3800 - (performance.now() - window.__t0), 300));
 history.scrollRestoration = 'manual';
 scrollTo(0, 0);
 
@@ -179,10 +181,8 @@ const panels = [...document.querySelectorAll<HTMLElement>('.panel')];
 const shade = document.getElementById('shade')!;
 const railBtns = [...document.querySelectorAll<HTMLElement>('.rail button')];
 const railFill = document.getElementById('rail-fill')!;
-const hudStop = document.getElementById('hud-stop')!;
-const STOP_NAMES = (k: number) => k === 0 ? tr('stop.0') : k === LAST ? tr('stop.5') : `0${k} · ${tr(['name.space', 'name.time', 'name.civ', 'name.inf'][k - 1]).toUpperCase()}`;
-const STOP_COLORS = ['--ink', '--pot', '--time', '--civ', '--inf', '--ink'];
 const labels = [...document.querySelectorAll<HTMLElement>('.lbl')];
+const LBL_R = [6.4, 5.5, 2.5, 11, 7]; // roughly how far each drawing reaches, so its name sits just outside it
 let active = -2;
 
 // ------------------------------------------------------------------ loop
@@ -246,14 +246,16 @@ function frame(now: number) {
     shade.classList.toggle('on', a >= 0 && a !== LAST);
     body.classList.toggle('map', a === LAST);
     railBtns.forEach(b => b.classList.toggle('on', +b.dataset.go! === a));
-    if (a >= 0) { hudStop.textContent = STOP_NAMES(a); hudStop.style.setProperty('--c', `var(${STOP_COLORS[a]})`); }
   }
   railFill.style.width = `${smooth(0, 1, (p - 1) / (LAST - 1)) * 100}%`;
   if (p > LAST - .7) labels.forEach((el, k) => {
+    const px = LBL_R[k] * innerHeight / (2 * camera.position.distanceTo(centers[k]) * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2));
+    const d = Math.round(10 + px * .9);
     tmp.copy(centers[k]).project(camera);
-    const x = (tmp.x * .5 + .5) * innerWidth, flip = x > innerWidth - 260;
+    const x = (tmp.x * .5 + .5) * innerWidth, wl = el.offsetWidth, flip = x + d + wl > innerWidth - 12 && x - d - wl > 12;
     el.classList.toggle('flip', flip);
-    el.style.transform = `translate(${flip ? x - 18 : x + 18}px, ${(-tmp.y * .5 + .5) * innerHeight - 16}px) translateX(${flip ? '-100%' : '0'})`;
+    el.style.setProperty('--d', `${d}px`); el.style.setProperty('--h', `${Math.round(Math.max(72, 2 * px + 12))}px`);
+    el.style.transform = `translate(${flip ? x - d : x + d}px, ${(-tmp.y * .5 + .5) * innerHeight - 16}px) translateX(${flip ? '-100%' : '0'})`;
   });
 
   composer.render(dt);

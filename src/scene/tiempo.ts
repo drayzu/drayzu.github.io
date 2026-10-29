@@ -1,14 +1,14 @@
 import * as THREE from 'three';
 import { C, Q, R, TAU, buffers, gauss, glow, mix3, near, points, put, randDir, smooth, std, type Piece, type V3 } from './shared';
 
-/** 03 · Tiempo: the history of the universe as an expanding cone. Still a nebula that condenses as you approach. */
+/** 02 · Tiempo: the history of the universe as an expanding cone. */
 export function tiempo(scene: THREE.Scene, center: THREE.Vector3, stop: number, map: number): Piece {
   const group = new THREE.Group();
   group.position.copy(center);
   group.rotation.set(.12, .55, .05);
   scene.add(group);
 
-  const form = { value: .3 };
+  const form = { value: .8 };
   const coneR = (u: number) => .15 + 1.6 * smooth(0, .06, u) + 5.2 * Math.pow(u, 1.7);
   const n = Math.round(17000 * Q), b = buffers(n), neb = new Float32Array(n * 3);
   for (let i = 0; i < n; i++) {
@@ -57,7 +57,7 @@ export function tiempo(scene: THREE.Scene, center: THREE.Vector3, stop: number, 
   return {
     center,
     update(t, p) {
-      form.value = .22 + .66 * near(p, stop) + .2 * near(p, map);
+      form.value = .8 + .25 * Math.max(near(p, stop), near(p, map)); // formed, breathing a little
       const ph = (t / 9) % 1;
       bang.scale.setScalar(2 + 9 * Math.exp(-ph * 7) * smooth(.15, .6, form.value));
     },
