@@ -22,6 +22,7 @@ const T: Record<Lang, Record<string, string>> = {
     'rail.map': 'Map',
     'lbl.pot': 'WHERE?', 'lbl.astro': 'THE LIBRARY', 'lbl.time': 'WHEN?', 'lbl.civ': 'HOW FAR?', 'lbl.inf': "WHAT'S BEYOND?",
     'nogl': 'Your browser cannot show the 3D journey, so here is the series as a list.',
+    'ui.sound': 'Sound · soon', 'ui.play': 'Play', 'ui.lang': 'Español', 'ui.lang.k': 'ES', 'ui.lang.label': 'Ver en español',
   },
   es: {
     'intro.kick': 'DRAYZU · UNA SERIE',
@@ -42,6 +43,7 @@ const T: Record<Lang, Record<string, string>> = {
     'rail.map': 'Mapa',
     'lbl.pot': '¿DÓNDE?', 'lbl.astro': 'LA BIBLIOTECA', 'lbl.time': '¿CUÁNDO?', 'lbl.civ': '¿ADÓNDE?', 'lbl.inf': '¿QUÉ HAY MÁS ALLÁ?',
     'nogl': 'Tu navegador no puede mostrar el viaje en 3D, así que aquí está la serie como lista.',
+    'ui.sound': 'Sonido · pronto', 'ui.play': 'Reproducir', 'ui.lang': 'English', 'ui.lang.k': 'EN', 'ui.lang.label': 'View in English',
   },
 };
 
@@ -61,5 +63,5 @@ export function apply(next: Lang = lang) {
   try { localStorage.setItem('lang', lang); } catch { /* ignore */ }
   document.documentElement.lang = lang;
   document.querySelectorAll<HTMLElement>('[data-t]').forEach(el => { el.innerHTML = t(el.dataset.t!); });
-  document.querySelectorAll<HTMLElement>('[data-lang]').forEach(el => el.classList.toggle('on', el.dataset.lang === lang));
+  document.querySelectorAll<HTMLElement>('[data-t-label]').forEach(el => el.setAttribute('aria-label', t(el.dataset.tLabel!)));
 }

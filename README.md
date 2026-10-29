@@ -13,7 +13,8 @@
 - One continuous camera flight in Three.js: scrolling moves the camera between the four pieces of the series: Espacio, Tiempo, Destino and Infinito. The Atlas, the library that serves them, shines beside the route and is always one click away.
 - Each piece is drawn in particles at its stop, and entering one dives into it.
 - Everything is particles and shaders, with bloom, a little grain, and a plain list for browsers without WebGL.
-- English and Spanish. `npm install`, `npm run dev`; pushing to `main` deploys to GitHub Pages, and `npm run deploy:dcc` publishes the same site at users.dcc.uchile.cl/~direyes.
+- English and Spanish, with the controls of the other pieces. Keys: `A` autoplay (the camera travels the series by itself and ends on the map), `L` language; the arrows go stop by stop.
+- `npm install`, `npm run dev`; pushing to `main` deploys to GitHub Pages, and `npm run deploy:dcc` publishes the same site at users.dcc.uchile.cl/~direyes.
 - The clip above is recorded from the site itself: `python tools/readme.py`.
 
 </details>

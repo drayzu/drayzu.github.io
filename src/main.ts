@@ -5,7 +5,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { apply as applyLang, type Lang } from './i18n';
+import { apply as applyLang, lang } from './i18n';
 import { mobile, shared, smooth } from './scene/shared';
 import { sky } from './scene/sky';
 import { potencias } from './scene/potencias';
@@ -27,9 +27,16 @@ if (import.meta.env.BASE_URL !== '/') { // the DCC copy points back to GitHub Pa
   const other = document.getElementById('other-home') as HTMLAnchorElement;
   other.href = 'https://drayzu.github.io/'; other.textContent = 'DRAYZU.GITHUB.IO';
 }
-document.querySelectorAll<HTMLButtonElement>('[data-lang]').forEach(b => b.addEventListener('click', () => {
-  applyLang(b.dataset.lang as Lang); active = -2; // re-label the current stop
-}));
+const switchLang = () => { applyLang(lang === 'en' ? 'es' : 'en'); active = -2; }; // and re-label the current stop
+document.getElementById('lang')!.addEventListener('click', switchLang);
+// the sound is not ready in any piece yet: its icon stays, faint, and says it comes soon (on hover, a tap or S)
+const soundBtn = document.getElementById('sound')!;
+let told = 0;
+const tellSound = () => {
+  soundBtn.classList.add('is-told'); clearTimeout(told);
+  told = window.setTimeout(() => soundBtn.classList.remove('is-told'), 1800);
+};
+soundBtn.addEventListener('click', tellSound);
 
 // ------------------------------------------------------------------ renderer (or the plain list, without WebGL)
 const canvas = document.getElementById('gl') as HTMLCanvasElement;
@@ -132,7 +139,7 @@ layout();
 let pTarget = 0, p = 0;
 const clampP = (v: number) => Math.min(Math.max(v, 0), LAST);
 addEventListener('scroll', () => { pTarget = clampP(scrollY / segH); }, { passive: true });
-const go = (k: number) => scrollTo({ top: clampP(k) * segH, behavior: reduced ? 'auto' : 'smooth' });
+const go = (k: number) => { play(false); scrollTo({ top: clampP(k) * segH, behavior: reduced ? 'auto' : 'smooth' }); };
 document.querySelectorAll<HTMLElement>('[data-go]').forEach(el => el.addEventListener('click', e => { e.preventDefault(); go(+el.dataset.go!); }));
 addEventListener('keydown', e => { // one key, one stop
   if (introT < 1 || e.altKey || e.ctrlKey || e.metaKey) return;
@@ -140,6 +147,43 @@ addEventListener('keydown', e => { // one key, one stop
   if (!next) return;
   e.preventDefault(); go(Math.round(pTarget) + next);
 });
+addEventListener('keydown', e => { // and the letters of the other pieces
+  if (introT < 1 || e.repeat || e.altKey || e.ctrlKey || e.metaKey) return;
+  const k = e.key.toLowerCase();
+  if (k === 'a') play(!auto); else if (k === 's') tellSound(); else if (k === 'l') switchLang();
+});
+
+// autoplay: the camera travels the series by itself, holding at each stop long enough to read it, and ends on the map
+const HOLD = 5, FLY = 4.6; // seconds at a stop, and from one to the next
+const playBtn = document.getElementById('play')!;
+const veil = document.getElementById('veil')!;
+let auto: { k: number; wait: number; s: number; y: number } | null = null; // the stop it left, time still to wait there, how far along to the next
+let veiled = false;
+function play(on: boolean) {
+  if (on === !!auto || (on && dive)) return;
+  auto = on ? { k: Math.round(pTarget), wait: 1.4, s: 0, y: scrollY } : null;
+  playBtn.classList.toggle('is-on', on); playBtn.setAttribute('aria-pressed', String(on));
+  if (!on || auto!.k < LAST) return;
+  // from the map it starts over, under a short fade rather than flying the whole route backwards
+  veiled = true; veil.classList.add('on');
+  setTimeout(() => {
+    veiled = false; veil.classList.remove('on');
+    if (!auto) return;
+    p = pTarget = 0; auto = { k: 0, wait: 3, s: 0, y: 0 }; scrollTo(0, 0);
+  }, 750);
+}
+playBtn.addEventListener('click', () => play(!auto));
+addEventListener('wheel', () => play(false), { passive: true });
+addEventListener('touchmove', () => play(false), { passive: true });
+function autoplay(dt: number) {
+  if (!auto || veiled) return;
+  if (Math.abs(scrollY - auto.y) > 4) return play(false); // the reader took over (keys, the scrollbar…)
+  if (auto.wait > 0) auto.wait -= dt;
+  else if ((auto.s += dt / FLY) >= 1) { auto.k++; auto.s = 0; auto.wait = HOLD; }
+  pTarget = auto.k + auto.s;
+  auto.y = Math.round(pTarget * segH); scrollTo(0, auto.y);
+  if (auto.k === LAST) play(false);
+}
 
 const mouse = new THREE.Vector2(), mouseS = new THREE.Vector2();
 if (!reduced) addEventListener('pointermove', e => { mouse.set(e.clientX / innerWidth * 2 - 1, e.clientY / innerHeight * 2 - 1); });
@@ -169,6 +213,7 @@ document.querySelectorAll<HTMLAnchorElement>('[data-dive]').forEach(a => a.addEv
   if (reduced || e.metaKey || e.ctrlKey || e.shiftKey) return; // let the browser handle it
   e.preventDefault();
   if (dive) return;
+  play(false);
   const color = getComputedStyle(a.closest('.panel')!).getPropertyValue('--c').trim();
   dive = { t: 0, from: camera.position.clone(), target: centers[+a.dataset.dive! - 1].clone(), href: a.href, fired: false };
   flood.style.setProperty('--c', color);
@@ -181,6 +226,8 @@ const panels = [...document.querySelectorAll<HTMLElement>('.panel')];
 const shade = document.getElementById('shade')!;
 const railBtns = [...document.querySelectorAll<HTMLElement>('.rail button')];
 const railFill = document.getElementById('rail-fill')!;
+const hud = document.querySelector<HTMLElement>('.hud')!;
+const ACCENT = ['ink', 'pot', 'time', 'civ', 'inf', 'ink'];
 const labels = [...document.querySelectorAll<HTMLElement>('.lbl')];
 // a few hundred points of each drawing, so its name and its ring follow what is actually seen (the tree, the cone and the galaxy are lopsided)
 const silhouettes = pieces.map(pc => {
@@ -209,6 +256,7 @@ function frame(now: number) {
   if (fixed) { dt = 1 / 30; t = fixed.t; p = fixed.p; introT = 1; }
   shared.uTime.value = t;
 
+  if (!fixed && !dive) autoplay(dt);
   if (!fixed) p += (pTarget - p) * (1 - Math.exp(-dt * (reduced ? 8 : 3.2)));
   const i = Math.min(Math.floor(p), LAST - 1), f = p - i, u = i + dwell(f);
   posCurve.getPoint(u / LAST, pos);
@@ -258,6 +306,7 @@ function frame(now: number) {
     shade.classList.toggle('on', a >= 0 && a !== LAST);
     body.classList.toggle('map', a === LAST);
     railBtns.forEach(b => b.classList.toggle('on', +b.dataset.go! === a));
+    if (a >= 0) hud.style.setProperty('--accent', `var(--${ACCENT[a]})`); // a lit control takes the colour of the stop
   }
   railFill.style.width = `${smooth(0, 1, (p - 1) / (LAST - 1)) * 100}%`;
   if (p > LAST - .7) {
@@ -311,7 +360,8 @@ function frame(now: number) {
 function resize() {
   camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight);
-  layout(); pTarget = clampP(scrollY / segH);
+  layout();
+  if (auto) { auto.y = Math.round(pTarget * segH); scrollTo(0, auto.y); } else pTarget = clampP(scrollY / segH);
 }
 addEventListener('resize', resize);
 if (capture) {
