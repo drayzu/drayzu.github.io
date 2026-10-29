@@ -158,7 +158,7 @@ addEventListener('keydown', startReveal, { once: true });
 addEventListener('wheel', startReveal, { once: true, passive: true });
 addEventListener('touchstart', startReveal, { once: true, passive: true });
 if (window.__go || reduced || capture || params.has('og') || params.has('stop')) startReveal();
-setTimeout(startReveal, Math.max(3800 - (performance.now() - window.__t0), 300));
+setTimeout(startReveal, Math.max(4400 - (performance.now() - window.__t0), 300)); // once the title has risen and its line is read
 history.scrollRestoration = 'manual';
 scrollTo(0, 0);
 

@@ -23,17 +23,10 @@
   <div id="track"></div>
 
   <div id="intro">
-    <div class="by">drayzu</div>
-    <div class="word" aria-label="Horizontes"></div>
-    <div class="horizon" aria-hidden="true"></div>
-    <div class="sub" data-t="series">A SERIES IN FOUR PIECES</div>
+    <p class="kick" data-t="intro.kick">DRAYZU · A SERIES</p>
+    <h1 class="hz" aria-label="Horizontes"><i class="hz-line" aria-hidden="true"></i><span class="hz-word" aria-hidden="true"></span></h1>
+    <p class="tag" data-t="hero.tag">Everything, from here.</p>
   </div>
-  <script>
-    // runs before the 3D loads, so the title appears at once
-    window.__t0 = performance.now();
-    [...'Horizontes'].forEach((ch, i) => { const s = document.createElement('span'); s.textContent = ch; s.style.animationDelay = (.3 + i * .065) + 's'; document.querySelector('#intro .word').append(s); });
-    document.getElementById('intro').addEventListener('click', () => { window.__go = true; }, { once: true });
-  </script>
 
   <header class="hud">
     <a class="logo" href="#" data-go="0">drayzu<span>HORIZONTES</span></a>
@@ -46,8 +39,7 @@
   <main>
     <section class="panel hero" data-stop="0">
       <p class="kick" data-t="series">A SERIES IN FOUR PIECES</p>
-      <h1>Horizontes</h1>
-      <div class="horizon" aria-hidden="true"></div>
+      <h1 class="hz" aria-label="Horizontes"><i class="hz-line" aria-hidden="true"></i><span class="hz-word" aria-hidden="true"></span></h1>
       <p class="tag" data-t="hero.tag">Everything, from here.</p>
       <p class="hint"><i></i><span data-t="hero.hint">SCROLL TO TRAVEL</span></p>
     </section>
@@ -115,6 +107,13 @@
   <p class="nogl-note" data-t="nogl"></p>
   <div id="flood"></div>
 
+  <script>
+    // runs before the 3D loads, so the title appears at once
+    window.__t0 = performance.now();
+    // HORIZONTES, one letter per span so each can rise from behind the line (the title card and the first stop)
+    document.querySelectorAll('.hz-word').forEach(w => [...'HORIZONTES'].forEach((ch, i) => { const s = document.createElement('span'); s.textContent = ch; s.style.setProperty('--i', i); w.append(s); }));
+    document.getElementById('intro').addEventListener('click', () => { window.__go = true; }, { once: true });
+  </script>
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

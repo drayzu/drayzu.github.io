@@ -4,6 +4,7 @@ const sup = (n: string) => `10<sup>${n}</sup>`;
 
 const T: Record<Lang, Record<string, string>> = {
   en: {
+    'intro.kick': 'DRAYZU · A SERIES',
     'series': 'A SERIES IN FOUR PIECES',
     'hero.tag': 'Everything, from here.',
     'hero.hint': 'SCROLL TO TRAVEL',
@@ -23,6 +24,7 @@ const T: Record<Lang, Record<string, string>> = {
     'nogl': 'Your browser cannot show the 3D journey, so here is the series as a list.',
   },
   es: {
+    'intro.kick': 'DRAYZU · UNA SERIE',
     'series': 'UNA SERIE EN CUATRO PIEZAS',
     'hero.tag': 'Todo, desde aquí.',
     'hero.hint': 'DESLIZA PARA VIAJAR',
