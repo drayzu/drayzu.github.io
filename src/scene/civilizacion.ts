@@ -46,7 +46,7 @@ export function civilizacion(scene: THREE.Scene, center: THREE.Vector3, stop: nu
   group.add(glow(0xffe2b8, 6, .25));
 
   return {
-    center,
+    center, group,
     update(t, p) {
       form.value = .8 + .25 * Math.max(near(p, stop), near(p, map)); // formed, breathing a little
       const ph = (t / 24) % 1;

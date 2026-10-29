@@ -79,7 +79,7 @@ export function astro(scene: THREE.Scene, center: THREE.Vector3): Piece {
     void main(){ float a = aSeed * 6.2831 + uTime * (0.08 + 0.12 * fract(aSeed * 7.0)); emit(position * cos(a) + aV * sin(a), aSize, aColor, 0.8); }`));
 
   return {
-    center,
+    center, group,
     update(t) {
       reveal.value = .14 + .6 * (.5 - .5 * Math.cos(t * Math.PI * 2 / 40));
       dyson.rotation.y = Math.sin(t * .05) * .35;

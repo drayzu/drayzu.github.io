@@ -99,6 +99,7 @@ export function glow(color: number, scale: number, opacity = 1) {
 /** Each piece of the series: where it sits, and how it moves with time and with the journey. */
 export interface Piece {
   center: THREE.Vector3;
+  group: THREE.Object3D;
   update(t: number, p: number): void;
 }
 

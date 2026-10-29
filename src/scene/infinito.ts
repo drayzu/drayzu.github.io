@@ -52,7 +52,7 @@ export function infinito(scene: THREE.Scene, center: THREE.Vector3): Piece {
   const seed = glow(0xdffcf3, 2.6, .8); seed.position.copy(ROOT); group.add(seed);
 
   return {
-    center,
+    center, group,
     update(t) { group.rotation.y = t * .03; },
   };
 }

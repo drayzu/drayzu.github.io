@@ -94,7 +94,7 @@ export function potencias(scene: THREE.Scene, center: THREE.Vector3): Piece {
   const nGlow = glow(0x5fb8d8, 5, .1); nGlow.position.copy(NUC); group.add(nGlow);
 
   return {
-    center,
+    center, group,
     update(t) { group.rotation.y = .4 + t * .02; },
   };
 }

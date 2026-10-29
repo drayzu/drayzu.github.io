@@ -55,7 +55,7 @@ export function tiempo(scene: THREE.Scene, center: THREE.Vector3, stop: number, 
   group.add(bang);
 
   return {
-    center,
+    center, group,
     update(t, p) {
       form.value = .8 + .25 * Math.max(near(p, stop), near(p, map)); // formed, breathing a little
       const ph = (t / 9) % 1;

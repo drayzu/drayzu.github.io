@@ -31,11 +31,8 @@ body.ready .hud { opacity: 1; pointer-events: auto; }
 .logo span { font: 500 10px/1 var(--mono); letter-spacing: .38em; padding: 4px 0 4px 14px; border-left: 1px solid rgba(236,231,219,.22); opacity: .62; }
 .hud-r { display: flex; align-items: center; gap: 18px; }
 .langs { display: flex; gap: 2px; }
-/* the Atlas, the series' library: always one click away */
-.atlas { display: flex; align-items: center; gap: 9px; text-decoration: none; font-size: 11px; letter-spacing: .2em; padding: 4px 0; opacity: .75; transition: opacity .3s; }
-.atlas:hover { opacity: 1; }
-.atlas i { width: 6px; height: 6px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
-.atlas span { opacity: .55; }
+.gh { display: flex; padding: 4px; opacity: .75; transition: opacity .3s; }
+.gh:hover { opacity: 1; }
 .langs button { all: unset; cursor: pointer; padding: 4px 8px; border-radius: 999px; font-size: 11px; letter-spacing: .2em; opacity: .45; transition: opacity .3s, background .3s; }
 .langs button:hover { opacity: .85; }
 .langs button.on { opacity: 1; background: rgba(236,231,219,.1); }
@@ -123,10 +120,10 @@ body.ready .rail { opacity: 1; pointer-events: auto; }
 .lbl::before { content: ''; position: absolute; left: 0; top: 7px; width: 8px; height: 1px; background: var(--c); }
 .lbl.flip { padding: 0 16px 0 0; align-items: flex-end; }
 .lbl.flip::before { left: auto; right: 0; }
+.lbl.stack { padding: 0; align-items: center; }
+.lbl.stack::before { display: none; }
 /* the drawing next to each name is clickable too */
-.lbl .hit { position: absolute; left: calc(-1 * var(--d, 18px) - var(--h, 72px) / 2); top: calc(16px - var(--h, 72px) / 2);
-  width: var(--h, 72px); height: var(--h, 72px); border-radius: 50%; }
-.lbl.flip .hit { left: auto; right: calc(-1 * var(--d, 18px) - var(--h, 72px) / 2); }
+.lbl .hit { position: absolute; border-radius: 50%; } /* placed on the drawing each frame */
 .lbl:hover .hit { box-shadow: 0 0 0 1px var(--c), 0 0 30px -4px var(--c); }
 .lbl .hit { transition: box-shadow .3s; }
 body.map .lbl { opacity: 1; visibility: visible; transition: opacity .8s, visibility 0s; }
@@ -165,8 +162,10 @@ body.nogl .nogl-note { display: block; padding: 0 var(--gut); font-size: 12px; o
   .hero h1 { font-size: clamp(60px, 17vw, 96px); }
   .shade { background: linear-gradient(0deg, rgba(4,5,7,.9) 0%, rgba(4,5,7,.55) 40%, rgba(4,5,7,0) 70%); }
   .rail button span { display: none; }
-  .atlas span { display: none; }
-  .hud-r { gap: 10px; }
+  .hud-r { gap: 8px; }
+  .logo { gap: 10px; }
+  .logo span { letter-spacing: .24em; padding-left: 10px; }
+  .langs button { padding: 4px 6px; }
   .enter { font-size: 12px; padding-left: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {

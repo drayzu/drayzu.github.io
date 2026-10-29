@@ -74,9 +74,9 @@ composer.addPass(finish);
 
 // ------------------------------------------------------------------ the series
 const C1 = new THREE.Vector3(0, 0, 0);
-const C2 = new THREE.Vector3(46, 7, -78);
-const C3 = new THREE.Vector3(-40, -10, -165);
-const C4 = new THREE.Vector3(30, 14, -255);
+const C2 = new THREE.Vector3(46, 7, -100);
+const C3 = new THREE.Vector3(-58, 20, -100); // depths chosen so the four sit evenly across the map
+const C4 = new THREE.Vector3(30, 14, -205);
 const C5 = new THREE.Vector3(-34, 2, -338);
 sky(scene);
 // The journey stops at the pieces (Espacio, Tiempo, Destino, Infinito); the Atlas, the library that serves them all,
@@ -182,7 +182,19 @@ const shade = document.getElementById('shade')!;
 const railBtns = [...document.querySelectorAll<HTMLElement>('.rail button')];
 const railFill = document.getElementById('rail-fill')!;
 const labels = [...document.querySelectorAll<HTMLElement>('.lbl')];
-const LBL_R = [6.4, 5.5, 2.5, 11, 7]; // roughly how far each drawing reaches, so its name sits just outside it
+// a few hundred points of each drawing, so its name and its ring follow what is actually seen (the tree, the cone and the galaxy are lopsided)
+const silhouettes = pieces.map(pc => {
+  const pts: { o: THREE.Object3D; v: THREE.Vector3 }[] = [];
+  pc.group.traverse(o => {
+    const g = (o as THREE.Points | THREE.Mesh).geometry;
+    if (!((o as THREE.Points).isPoints || (o as THREE.Mesh).isMesh) || !g) return;
+    const a = g.attributes.position, step = Math.max(1, Math.floor(a.count / 160));
+    for (let i = 0; i < a.count; i += step) pts.push({ o, v: new THREE.Vector3().fromBufferAttribute(a, i) });
+  });
+  return pts;
+});
+const xs: number[] = [], ys: number[] = [], taken: number[][] = [];
+const pct = (a: number[], q: number) => a[Math.min(a.length - 1, Math.floor(q * a.length))];
 let active = -2;
 
 // ------------------------------------------------------------------ loop
@@ -248,15 +260,42 @@ function frame(now: number) {
     railBtns.forEach(b => b.classList.toggle('on', +b.dataset.go! === a));
   }
   railFill.style.width = `${smooth(0, 1, (p - 1) / (LAST - 1)) * 100}%`;
-  if (p > LAST - .7) labels.forEach((el, k) => {
-    const px = LBL_R[k] * innerHeight / (2 * camera.position.distanceTo(centers[k]) * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2));
-    const d = Math.round(10 + px * .9);
-    tmp.copy(centers[k]).project(camera);
-    const x = (tmp.x * .5 + .5) * innerWidth, wl = el.offsetWidth, flip = x + d + wl > innerWidth - 12 && x - d - wl > 12;
-    el.classList.toggle('flip', flip);
-    el.style.setProperty('--d', `${d}px`); el.style.setProperty('--h', `${Math.round(Math.max(72, 2 * px + 12))}px`);
-    el.style.transform = `translate(${flip ? x - d : x + d}px, ${(-tmp.y * .5 + .5) * innerHeight - 16}px) translateX(${flip ? '-100%' : '0'})`;
-  });
+  if (p > LAST - .7) {
+    // where each drawing is on screen: its ring
+    const rings = silhouettes.map(sil => {
+      xs.length = ys.length = 0;
+      for (const { o, v } of sil) {
+        tmp.copy(v).applyMatrix4(o.matrixWorld).project(camera);
+        xs.push((tmp.x * .5 + .5) * innerWidth); ys.push((-tmp.y * .5 + .5) * innerHeight);
+      }
+      xs.sort((a, b) => a - b); ys.sort((a, b) => a - b);
+      const x0 = pct(xs, .01), x1 = pct(xs, .99), y0 = pct(ys, .01), y1 = pct(ys, .99);
+      return { cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, h: Math.round(Math.max(56, Math.max(x1 - x0, y1 - y0) + 18)) };
+    });
+    // each name sits just outside its ring, on the side that keeps clear of the other drawings and names
+    taken.length = 0;
+    labels.forEach((el, k) => {
+      const { cx, cy, h } = rings[k], wl = el.offsetWidth, hl = el.offsetHeight;
+      // 0 right of the ring, 1 left, 2 above, 3 below
+      const box = (m: number) => {
+        const l = m === 0 ? cx + h / 2 + 10 : m === 1 ? cx - h / 2 - 10 - wl : cx - wl / 2;
+        const t = m < 2 ? cy - 16 : m === 2 ? cy - h / 2 - 6 - hl : cy + h / 2 + 6;
+        return [l, t, l + wl, t + hl];
+      };
+      const fits = (m: number) => { const [l, t, r, b] = box(m); return l > 12 && r < innerWidth - 12 && t > 60 && b < innerHeight - 12; };
+      const others = [...taken, ...rings.filter((_, j) => j !== k).map(r => [r.cx - r.h / 2.6, r.cy - r.h / 2.6, r.cx + r.h / 2.6, r.cy + r.h / 2.6])];
+      const clear = (m: number) => { const b = box(m); return others.every(o => b[2] < o[0] || b[0] > o[2] || b[3] < o[1] || b[1] > o[3]); };
+      const m = [0, 1, 2, 3].find(m => fits(m) && clear(m)) ?? [0, 1, 2, 3].find(fits) ?? 0;
+      const [ax, ay] = box(m);
+      taken.push(box(m));
+      el.classList.toggle('flip', m === 1); el.classList.toggle('stack', m > 1);
+      const hit = el.firstElementChild as HTMLElement;
+      hit.style.width = hit.style.height = `${h}px`;
+      hit.style.top = `${cy - ay - h / 2}px`; hit.style.right = 'auto';
+      hit.style.left = `${cx - ax - h / 2}px`;
+      el.style.transform = `translate(${ax}px, ${ay}px)`;
+    });
+  }
 
   composer.render(dt);
   if (capture) return;
