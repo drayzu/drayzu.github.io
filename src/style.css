@@ -98,7 +98,6 @@ body.ready .rail { opacity: 1; pointer-events: auto; }
 .panel.hero > .horizon { transform: scaleX(0); transform-origin: left; filter: none; }
 .panel.hero.on > .horizon { transform: scaleX(1); transition: transform 1.8s cubic-bezier(.6,0,.2,1) .25s; }
 .hero .tag { font-size: clamp(26px, 2.5vw, 40px); opacity: .92; margin-top: 22px; }
-.lede { font-size: 13px; line-height: 1.7; letter-spacing: .02em; opacity: .6; margin: 10px 0 0; max-width: 46ch; }
 .hint { margin: 34px 0 0; font-size: 11px; letter-spacing: .3em; opacity: .5; display: flex; align-items: center; gap: 14px; }
 .hint i { width: 1px; height: 34px; background: linear-gradient(var(--ink), transparent); animation: drop 2.2s ease-in-out infinite; transform-origin: top; }
 @keyframes drop { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
@@ -164,7 +163,6 @@ body.nogl .nogl-note { display: block; padding: 0 var(--gut); font-size: 12px; o
   .panel { left: 20px; right: 20px; width: auto; top: auto; bottom: 96px; transform: none; }
   .hero { bottom: 110px; }
   .hero h1 { font-size: clamp(60px, 17vw, 96px); }
-  .lede { font-size: 12px; }
   .shade { background: linear-gradient(0deg, rgba(4,5,7,.9) 0%, rgba(4,5,7,.55) 40%, rgba(4,5,7,0) 70%); }
   .rail button span { display: none; }
   .atlas span { display: none; }

@@ -6,7 +6,6 @@ const T: Record<Lang, Record<string, string>> = {
   en: {
     'series': 'A SERIES IN FOUR PIECES',
     'hero.tag': 'Everything, from here.',
-    'hero.lede': 'Interactive pieces about the universe, and our place in it.',
     'hero.hint': 'SCROLL TO TRAVEL',
     'enter': 'ENTER',
     'name.space': 'Espacio', 'name.time': 'Tiempo', 'name.civ': 'Destino', 'name.inf': 'Infinito', 'atlas.what': ' · THE LIBRARY',
@@ -26,7 +25,6 @@ const T: Record<Lang, Record<string, string>> = {
   es: {
     'series': 'UNA SERIE EN CUATRO PIEZAS',
     'hero.tag': 'Todo, desde aquí.',
-    'hero.lede': 'Piezas interactivas sobre el universo y nuestro lugar en él.',
     'hero.hint': 'DESLIZA PARA VIAJAR',
     'enter': 'ENTRAR',
     'name.space': 'Espacio', 'name.time': 'Tiempo', 'name.civ': 'Destino', 'name.inf': 'Infinito', 'atlas.what': ' · LA BIBLIOTECA',
